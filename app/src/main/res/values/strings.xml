@@ -1,5 +1,14 @@
 <resources>
-    <string name="app_name">HW1 Robots</string>
-    <string name="descriptive_text">Description of the ImageButton</string>
-
+    <string name="app_name">Robot</string>
+    <string name="begin_mssg">Begin The Game!</string>
+    <string name="red_robot_mssg">Red Robot\'s Turn</string>
+    <string name="white_robot_mssg">White Robot\'s Turn</string>
+    <string name="yellow_robot_mssg">Yellow Robot\'s Turn</string>
+    <string name="reward_a">Reward A</string>
+    <string name="reward_b">Reward B</string>
+    <string name="reward_c">Reward C</string>
+    <string name="purchased">Purchased</string>
+    <string name="insufficient">Insufficient Resources</string>
+    <string name="robot_energy">0</string>
+    <string name="purchase_rewards">Make Purchase</string>
 </resources>

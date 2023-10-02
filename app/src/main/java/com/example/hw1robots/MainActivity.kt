@@ -1,106 +1,92 @@
 package com.example.hw1robots
 
+import android.content.Intent
+import com.example.hw1robots.R
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.ImageButton
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import com.example.myapplication.Robot
+
+private const val TAG = "MainActivity"
+const val EXTRA_ROBOT_ENERGY = "com.bignerdranch.android.robot.current_robot_energy"
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var redBotImage: ImageView
+    private lateinit var whiteBotImage: ImageView
+    private lateinit var yellowBotImage: ImageView
+    private lateinit var messageBox: TextView
+    private lateinit var reward_button : Button
 
-    private  lateinit var redImg:ImageView
-    private  lateinit var whiteImg:ImageView
-    private  lateinit var yellowImg:ImageView
-    private  lateinit var clockwiseButton:ImageButton
-    private  lateinit var counterButton:ImageButton
+    private lateinit var robotImages : MutableList<ImageView>
 
-    var turnCount = 0
-    var clockwise = 0
-    var counter = 0
+    private var turnCount = 0
+    private val robots = listOf(
+        Robot(R.string.red_robot_mssg, false,
+            R.drawable.king_of_detroit_robot_red_large, R.drawable.king_of_detroit_robot_red_small),
+        Robot(R.string.white_robot_mssg, false,
+            R.drawable.king_of_detroit_robot_white_large, R.drawable.king_of_detroit_robot_white_small),
+        Robot(R.string.yellow_robot_mssg, false,
+            R.drawable.king_of_detroit_robot_yellow_large, R.drawable.king_of_detroit_robot_yellow_small)
+    )
+
+    private val robotViewModel : RobotViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        redBotImage = findViewById(R.id.redRobot)
+        whiteBotImage = findViewById(R.id.whiteRobot)
+        yellowBotImage = findViewById(R.id.yellowRobot)
+        messageBox = findViewById(R.id.messageBox)
+        reward_button = findViewById(R.id.purchase_rewards_button)
 
-        redImg = findViewById(R.id.redRobot)
-        whiteImg = findViewById(R.id.whiteRobot)
-        yellowImg = findViewById(R.id.yellowRobot)
+        robotImages = mutableListOf(redBotImage, whiteBotImage, yellowBotImage)
 
-        clockwiseButton = findViewById(R.id.imageButton)
-        counterButton = findViewById(R.id.imageButton2)
-
-        clockwiseButton.setOnClickListener { view: View -> toggleButton() }
-        counterButton.setOnClickListener { view: View -> toggleButton2() }
-
-
-        redImg.setOnClickListener{view: View -> toggleImage()}
-        whiteImg.setOnClickListener{view: View -> toggleImage()}
-        yellowImg.setOnClickListener{view: View -> toggleImage()}
-
+        redBotImage.setOnClickListener { toggleImage() }
+        whiteBotImage.setOnClickListener { toggleImage() }
+        yellowBotImage.setOnClickListener { toggleImage() }
+        reward_button.setOnClickListener {view : View ->
+            //Toast.makeText(this, "Going to make a purchase!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, RobotPurchase::class.java)
+            startActivity(intent)
+        }
     }
 
 
-    private fun toggleImage(){
+    private fun toggleImage() {
         turnCount++
-        if (turnCount > 2){
-            turnCount = 0
-        }
-        if (turnCount == 1){// red is large
-            redImg.setImageResource(R.drawable.king_of_detroit_robot_red_large)
-            whiteImg.setImageResource(R.drawable.king_of_detroit_robot_white_small)
-            yellowImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_small)
-        }else if (turnCount == 2){
-            redImg.setImageResource(R.drawable.king_of_detroit_robot_red_small )
-            whiteImg.setImageResource(R.drawable.king_of_detroit_robot_white_large)
-            yellowImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_small)
-        }else{
-            redImg.setImageResource(R.drawable.king_of_detroit_robot_red_small)
-            whiteImg.setImageResource(R.drawable.king_of_detroit_robot_white_small)
-            yellowImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_large)
-        }
-
+        if(turnCount > 3)
+            turnCount = 1
+        updateMessageBox()
+        setRobotsTurn()
+        setRobotImages()
     }
 
-    private fun toggleButton(){
-        clockwise++
-        if (clockwise > 2){
-            clockwise = 0
-        }
-        if (clockwise == 1){// red is large
-            redImg.setImageResource(R.drawable.king_of_detroit_robot_red_large)
-            whiteImg.setImageResource(R.drawable.king_of_detroit_robot_white_small)
-            yellowImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_small)
-        }else if (clockwise == 0){
-            redImg.setImageResource(R.drawable.king_of_detroit_robot_red_small )
-            whiteImg.setImageResource(R.drawable.king_of_detroit_robot_white_large)
-            yellowImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_small)
-        }else{
-            redImg.setImageResource(R.drawable.king_of_detroit_robot_red_small)
-            whiteImg.setImageResource(R.drawable.king_of_detroit_robot_white_small)
-            yellowImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_large)
-        }
-
-    }
-    private fun toggleButton2(){
-        clockwise++
-        if (clockwise > 2){
-            clockwise = 0
-        }
-        if (clockwise == 1){// red is large
-            redImg.setImageResource(R.drawable.king_of_detroit_robot_red_large)
-            whiteImg.setImageResource(R.drawable.king_of_detroit_robot_white_small)
-            yellowImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_small)
-        }else if (clockwise == 2){
-            redImg.setImageResource(R.drawable.king_of_detroit_robot_red_small )
-            whiteImg.setImageResource(R.drawable.king_of_detroit_robot_white_large)
-            yellowImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_small)
-        }else{
-            redImg.setImageResource(R.drawable.king_of_detroit_robot_red_small)
-            whiteImg.setImageResource(R.drawable.king_of_detroit_robot_white_small)
-            yellowImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_large)
-        }
-
+    private fun updateMessageBox(){
+        messageBox.setText(robots[turnCount - 1].messageResource)
     }
 
+    private fun setRobotsTurn(){
+        for(robot in robots){robot.myTurn = false}
+        robots[turnCount - 1].myTurn = true
+    }
+
+    private fun setRobotImages(){
+        for(indy in robots.indices){
+            if(robots[indy].myTurn){
+                robotImages[indy].setImageResource(robots[indy].largeImgRes)
+            }else{
+                robotImages[indy].setImageResource(robots[indy].smallImgRes)
+            }
+        }
+    }
 }

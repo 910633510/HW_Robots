@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     tools:context=".MainActivity">
 
 
@@ -41,35 +41,32 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/messageBox"
+        android:layout_width="148dp"
+        android:layout_height="wrap_content"
+        android:textSize="21dp"
+        android:text="Begin the Game"
+
+
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:layout_marginTop="10dp">
+        android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/shape"
-
-            android:contentDescription="@string/descriptive_text"
-
-            app:srcCompat="@drawable/rot_clockwise" />
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="16dp"
-            android:background="@drawable/shape"
-            android:contentDescription="@string/descriptive_text"
-            app:srcCompat="@drawable/rot_counter" />
-
+    <Button
+        android:id="@+id/purchase_rewards_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make\nPurchase" />
     </LinearLayout>
 
 
+
+
 </LinearLayout>
+
 

@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HW1Robots"
         tools:targetApi="31">
+        <activity android:name=".RobotPurchase" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
