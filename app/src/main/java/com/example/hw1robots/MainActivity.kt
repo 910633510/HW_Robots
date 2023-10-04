@@ -1,17 +1,12 @@
 package com.example.hw1robots
-
-import android.content.Intent
-import com.example.hw1robots.R
-
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModel
 import com.example.myapplication.Robot
 
 private const val TAG = "MainActivity"
@@ -24,18 +19,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var yellowBotImage: ImageView
     private lateinit var messageBox: TextView
     private lateinit var reward_button : Button
-
+    private var imagetoint = 0
     private lateinit var robotImages : MutableList<ImageView>
-
-    private var turnCount = 0
-    private val robots = listOf(
-        Robot(R.string.red_robot_mssg, false,
-            R.drawable.king_of_detroit_robot_red_large, R.drawable.king_of_detroit_robot_red_small),
-        Robot(R.string.white_robot_mssg, false,
-            R.drawable.king_of_detroit_robot_white_large, R.drawable.king_of_detroit_robot_white_small),
-        Robot(R.string.yellow_robot_mssg, false,
-            R.drawable.king_of_detroit_robot_yellow_large, R.drawable.king_of_detroit_robot_yellow_small)
-    )
 
     private val robotViewModel : RobotViewModel by viewModels()
 
@@ -55,9 +40,23 @@ class MainActivity : AppCompatActivity() {
         whiteBotImage.setOnClickListener { toggleImage() }
         yellowBotImage.setOnClickListener { toggleImage() }
         reward_button.setOnClickListener {view : View ->
-            //Toast.makeText(this, "Going to make a purchase!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, RobotPurchase::class.java)
+            val intent = RobotPurchase.newIntent(this, RobotPurchase::class.java)
+//            intent.putExtra(EXTRA_ROBOT_ENERGY,)
+            intent.putExtra("Whos_turn",imagetoint)
+            intent.putExtra(EXTRA_ROBOT_ENERGY, robots[imagetoint].energy)
+
+            intent.putExtra("refresh_reward",1)
+            uniqueRandomInts = (1..7).shuffled().take(3)
+
+
             startActivity(intent)
+
+        }
+        if (turnCount != 0)
+        {
+            updateMessageBox()
+            setRobotsTurn()
+            setRobotImages()
         }
     }
 
@@ -66,6 +65,13 @@ class MainActivity : AppCompatActivity() {
         turnCount++
         if(turnCount > 3)
             turnCount = 1
+
+        if (robots[turnCount-1].Purchase_history.size > 0)
+        {   var hist = robots[turnCount-1].Purchase_history.joinToString(separator = ", ")
+
+            Toast.makeText(this, "Reward Purchased:" + hist, Toast.LENGTH_SHORT).show()
+        }
+
         updateMessageBox()
         setRobotsTurn()
         setRobotImages()
@@ -84,6 +90,8 @@ class MainActivity : AppCompatActivity() {
         for(indy in robots.indices){
             if(robots[indy].myTurn){
                 robotImages[indy].setImageResource(robots[indy].largeImgRes)
+                imagetoint = indy
+                robots[imagetoint].energy++
             }else{
                 robotImages[indy].setImageResource(robots[indy].smallImgRes)
             }
